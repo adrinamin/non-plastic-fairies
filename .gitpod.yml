@@ -8,7 +8,7 @@ tasks:
         set -e # Tells bash to immediately exit on failure off a command
         cd ..
         python3 -m venv npf_venv
-        source npf_venv/bin/activate
+        source ../npf_venv/bin/activate
         cd non-plastic-fairies/
       )
   - name: Installing dependencies
