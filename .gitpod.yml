@@ -4,6 +4,7 @@ tasks:
     before:  |
       (
         set -e
+        cd ..
         python3 -m venv npf_venv
       )
   - name: Installing dependencies
