@@ -14,10 +14,15 @@ tasks:
         python3 -m pip install --upgrade pip
         python3 -m pip install -r requirements.txt
       )
-  - name: test
-    command: echo 'command script'
+  - name: run dev server
+    command: |
+      (
+        set -e
+        cd src/non-plastic-info/
+        uvicorn main:app --reload
+      )
 
 # List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
-# ports:
-#   - port: 3000
-#     onOpen: open-preview
+ports:
+  - port: 8000
+    onOpen: open-preview
