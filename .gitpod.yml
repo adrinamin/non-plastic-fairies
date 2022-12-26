@@ -1,22 +1,21 @@
 # List the start up tasks. Learn more https://www.gitpod.io/docs/config-start-tasks/
 tasks:
-  - name: before
-    before: echo 'before script'
   - name: create virtual environment for python
-    init: |
+    before:  |
       (
-        set -e # Tells bash to immediately exit on failure off a command
-        cd ..
+        set -e
         python3 -m venv npf_venv
-        source ../npf_venv/bin/activate
-        cd non-plastic-fairies/
       )
   - name: Installing dependencies
-    command: |
+    init: |
       (
+        set -e
+        source ../npf_venv/bin/activate
         python3 -m pip install --upgrade pip
         python3 -m pip install -r requirements.txt
       )
+  - name: test
+    command: echo 'command script'
 
 # List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
 # ports:
