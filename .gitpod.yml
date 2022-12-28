@@ -1,11 +1,11 @@
-# List the start up tasks. Learn more https://www.gitpod.io/docs/config-start-tasks/
+
 tasks:
   - name: Copy requirements.txt content
     before:  |
       (
         cp requirements.txt src/non-plastic-info/app_requirements.txt
       )
-  - name: Installing dependencies
+  - name: Initiaize environment
     init: |
       (
         set -e
@@ -14,6 +14,9 @@ tasks:
         curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
         sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
         kubectl version --client --output=yaml
+        wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+        echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+        sudo apt update && sudo apt install terraform
         gp sync-done installation
       )
   - name: run dev server
@@ -50,3 +53,11 @@ github:
     master: true
     branches: true
     pullRequests: true
+vscode:
+  extensions:
+    - hashicorp.terraform
+    - ms-azuretools.vscode-docker
+    - njpwerner.autodocstring
+    - PKief.material-icon-theme
+    - ms-python.python
+    - TabNine.tabnine-vscode
