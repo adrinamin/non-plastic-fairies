@@ -29,7 +29,8 @@ tasks:
     init: gp sync-await installation
     command: |
       (
-        docker build -t devImage .
+        cd src/non-plastic-info/
+        docker build -t devimage .
         # docker run --name dev -p 80:80 devImage # optional and disabled by default
       )
 
