@@ -16,6 +16,17 @@ tasks:
         wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
         echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
         sudo apt update && sudo apt install terraform
+        sudo apt-get update
+        sudo apt-get install ca-certificates curl apt-transport-https lsb-release gnupg
+        curl -sL https://packages.microsoft.com/keys/microsoft.asc |
+          gpg --dearmor |
+          sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
+        AZ_REPO=$(lsb_release -cs)
+          echo "deb [arch=`dpkg --print-architecture`] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" |
+          sudo tee /etc/apt/sources.list.d/azure-cli.list
+        sudo apt-get update
+        sudo apt-get install azure-cli
+        az --version
         gp sync-done installation
       )
   - name: run dev server
