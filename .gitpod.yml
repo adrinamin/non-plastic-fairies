@@ -1,16 +1,68 @@
-# List the start up tasks. Learn more https://www.gitpod.io/docs/config-start-tasks/
 tasks:
-  - name: move to parent folder
-    before: echo 'before script'
-  - init: |
+  - name: Copy requirements.txt content
+    before:  |
       (
-        set -e # Tells bash to immediately exit on failure off a command
-        cd ..
-        python3 -m venv npf_venv
+        cp requirements.txt src/non-plastic-info/app_requirements.txt
       )
-    command: echo 'command script'
+  - name: Initiaize environment
+    init: |
+      (
+        set -e
+        python3 -m pip install --upgrade pip
+        python3 -m pip install -r requirements.txt
+        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+        sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+        kubectl version --client --output=yaml
+        wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+        echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+        sudo apt update && sudo apt install terraform
+        gp sync-done installation
+      )
+  - name: run dev server
+    init: gp sync-await installation
+    command: |
+      (
+        set -e
+        cd src/non-plastic-info/
+        uvicorn main:app --reload
+      )
+    openMode: tab-after
+  - name: build docker image
+    init: gp sync-await installation
+    command: |
+      (
+        cd src/non-plastic-info/
+        docker build -t devimage .
+        # docker run --name dev -p 80:80 devimage # optional and disabled by default
+      )
 
 # List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
 ports:
-  - port: 3000
+  - name: non-plastic-info Api
+    description: The non plastic info dev server
+    port: 8000
     onOpen: open-preview
+  - name: non-plastic-info Api (Docker)
+    description: The non plastic info dev server in a docker container
+    port: 80
+    onOpen: open-preview
+
+github:
+  prebuilds:
+    master: true
+    branches: true
+    pullRequests: true
+vscode:
+  extensions:
+    - hashicorp.terraform
+    - ms-azuretools.vscode-docker
+    - njpwerner.autodocstring
+    - PKief.material-icon-theme
+    - ms-python.python
+    - TabNine.tabnine-vscode
+    - ms-python.isort
+    - ms-toolsai.jupyter
+    - ms-toolsai.vscode-jupyter-cell-tags
+    - ms-toolsai.jupyter-keymap
+    - ms-toolsai.vscode-jupyter-slideshow
+    - ms-toolsai.jupyter-renderers
