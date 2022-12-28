@@ -1,4 +1,3 @@
-
 tasks:
   - name: Copy requirements.txt content
     before:  |
@@ -61,3 +60,9 @@ vscode:
     - PKief.material-icon-theme
     - ms-python.python
     - TabNine.tabnine-vscode
+    - ms-python.isort
+    - ms-toolsai.jupyter
+    - ms-toolsai.vscode-jupyter-cell-tags
+    - ms-toolsai.jupyter-keymap
+    - ms-toolsai.vscode-jupyter-slideshow
+    - ms-toolsai.vscode-jupyter-renderers
