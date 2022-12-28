@@ -13,17 +13,25 @@ tasks:
         set -e
         python3 -m pip install --upgrade pip
         python3 -m pip install -r requirements.txt
+        cd src/non-plastic-info/
+        uvicorn main:app --reload
       )
   - name: run dev server
     init: gp sync-await bundle
     command: |
       (
         set -e
-        cd src/non-plastic-info/
-        uvicorn main:app --reload
+        # cd src/non-plastic-info/
+        # uvicorn main:app --reload
       )
 
 # List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
 ports:
   - port: 8000
     onOpen: open-preview
+
+github:
+  prebuilds:
+    master: true
+    branches: true
+    pullRequests: true
