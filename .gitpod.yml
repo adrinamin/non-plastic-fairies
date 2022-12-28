@@ -31,7 +31,7 @@ tasks:
       (
         cd src/non-plastic-info/
         docker build -t devimage .
-        # docker run --name dev -p 80:80 devImage # optional and disabled by default
+        # docker run --name dev -p 80:80 devimage # optional and disabled by default
       )
 
 # List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
