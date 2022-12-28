@@ -1,11 +1,9 @@
 # List the start up tasks. Learn more https://www.gitpod.io/docs/config-start-tasks/
 tasks:
-  - name: create virtual environment for python
+  - name: Pre Init
     before:  |
       (
-        set -e
-        cd ..
-        # python3 -m venv npf_venv
+        echo 'tbd'
       )
   - name: Installing dependencies
     init: |
@@ -13,16 +11,15 @@ tasks:
         set -e
         python3 -m pip install --upgrade pip
         python3 -m pip install -r requirements.txt
-        cd src/non-plastic-info/
-        uvicorn main:app --reload
+        gp sync-done installation
       )
   - name: run dev server
-    init: gp sync-await bundle
+    init: gp sync-await installation
     command: |
       (
         set -e
-        # cd src/non-plastic-info/
-        # uvicorn main:app --reload
+        cd src/non-plastic-info/
+        uvicorn main:app --reload
       )
 
 # List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
