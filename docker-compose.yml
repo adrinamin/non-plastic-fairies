@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  non-plastic-info-api:
+    build:
+      context: ./src/non-plastic-info/
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
